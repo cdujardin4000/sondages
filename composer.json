@@ -1,0 +1,15 @@
+{
+    "name": "o/sondages",
+    "autoload": {
+        "psr-4": {
+            "O\\Sondages\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "cdujardin4000",
+            "email": "51912624+cdujardin4000@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}

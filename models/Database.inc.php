@@ -39,6 +39,7 @@ class Database {
 		/* TODO  */
 	}
 
+
 	/**
 	 * Vérifie si un pseudonyme est valide, c'est-à-dire,
 	 * s'il contient entre 3 et 10 caractères et uniquement des lettres.
@@ -89,8 +90,8 @@ class Database {
 	/**
 	 * Ajoute un nouveau compte utilisateur si le pseudonyme est valide et disponible et
 	 * si le mot de passe est valide. La méthode peut retourner un des messages d'erreur qui suivent :
-	 * - "Le pseudo doit contenir entre 3 et 10 lettres.";
-	 * - "Le mot de passe doit contenir entre 3 et 10 caractères.";
+	 * - "Le pseudo doit contenir entre 3 et 10 lettres."
+	 * - "Le mot de passe doit contenir entre 3 et 10 caractères."
 	 * - "Le pseudo existe déjà.".
 	 *
 	 * @param string $nickname Pseudonyme.
@@ -128,7 +129,21 @@ class Database {
 		/* TODO  */
 		return true;
 	}
+	/**
+	 *
+	 *
+	 *
+	 *
+	 */
+	public function getRandomSurveys($int) {
+		$tab = array(
+			new Survey('tom', 'sond1'),
+			new Survey('marc', 'sond2'),
+			new Survey('paul', 'sond3'),
+			new Survey('roger', 'sond4'));
 
+		return $tab;
+	}
 	/**
 	 * Sauvegarde une réponse dans la base de donnée et met à jour son indentifiant.
 	 *
@@ -157,7 +172,9 @@ class Database {
 	 * @return array(Survey)|boolean Sondages trouvés par la fonction ou false si une erreur s'est produite.
 	 */
 	public function loadSurveysByKeyword($keyword) {
-		/* TODO  */
+		return array(new Survey('tom', "quel est l'age du capitaine"),
+					new Survey('marc', 'quelle est la couleur du cheval blanc?')
+			);
 	}
 
 

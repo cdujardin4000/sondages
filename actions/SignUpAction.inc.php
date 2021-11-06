@@ -22,12 +22,12 @@ class SignUpAction extends Action {
 	 * @see Action::run()
 	 */
 	public function run() {
-		$login = $_POST['signUpLogin'];
+		$nickname = $_POST['signUpLogin'];
 		$password = $_POST['signUpPassword'];
 		$password2 = $_POST['signUpPassword2'];
 
 		if ($password == $password2) {
-			$response = $this->database->addUser($login, $password);
+			$response = $this->database->addUser($nickname, $password);
 			if ($response===true){
 				$this->setModel(new MessageModel());
 				$this->getModel()->setMessage('inscription réussie');
