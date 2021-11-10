@@ -16,7 +16,15 @@ class Database {
 		$this->connection = new PDO("sqlite:database.sqlite");
 		if (!$this->connection) die("impossible d'ouvrir la base de données");
 
-		$q = $this->connection->query('SELECT name FROM sqlite_master WHERE type="table"');
+		$q = $this->connection->query(
+			`SELECT
+				name
+			FROM
+				sqlite_master
+			WHERE
+					type ='table' AND
+					name NOT LIKE 'sqlite_%';`
+		);
 
 		if (count($q->fetchAll())==0) {
 			$this->createDataBase();
@@ -36,7 +44,22 @@ class Database {
 	 *		count integer);
 	 */
 	private function createDataBase() {
-		/* TODO  */
+		$this->connection = new Database();
+		$this->connection->query('CREATE TABLE users(
+    		nickname char (20),
+    		password char (50))           
+    	');
+		$this->connection->query('CREATE TABLE surveys(
+    		id INTEGER PRIMARY KEY AUTOINCREMENT,
+    		owner char (20),
+			question char (255))
+    	');
+		$this->connection->query('CREATE TABLE responses(
+    		id INTEGER PRIMARY KEY AUTOINCREMENT,
+    		idSurvey INTEGER,
+    		title char (255),
+    		count INTEGER)          
+    	');
 	}
 
 
@@ -48,8 +71,13 @@ class Database {
 	 * @return boolean True si le pseudonyme est valide, false sinon.
 	 */
 	private function checkNicknameValidity($nickname) {
-		/* TODO  */
-		return true;
+		if (is_string($nickname) && strlen($nickname) > 2 && strlen($nickname) < 11){
+			return true;
+		}
+		else {
+			return false;
+			echo "Il y a un problème avec le mot de passe";
+		}
 	}
 
 	/**
@@ -60,8 +88,13 @@ class Database {
 	 * @return boolean True si le mot de passe est valide, false sinon.
 	 */
 	private function checkPasswordValidity($password) {
-		/* TODO  */
-		return true;
+		if (strlen($password) > 2 && strlen($password) < 11){
+			return true;
+		}
+		else {
+			return false;
+			echo "Il y a un problème avec le mot de passe";
+		}
 	}
 
 	/**
@@ -71,8 +104,16 @@ class Database {
 	 * @return boolean True si le pseudonyme est disponible, false sinon.
 	 */
 	private function checkNicknameAvailability($nickname) {
-		/* TODO  */
-		return false;
+		$sql = "SELECT * FROM users WHERE nickname = $nickname";
+		$result = $this->connection->query($sql);
+
+		if (mysqli_num_rows($result) !== 0){
+			return false;
+			echo "Le pseudo n'est pas disponible";
+		}
+		else {
+			return true;
+		}
 	}
 
 	/**
@@ -83,8 +124,14 @@ class Database {
 	 * @return boolean True si le couple est correct, false sinon.
 	 */
 	public function checkPassword($nickname, $password) {
-		/* TODO  */
-		return true;
+		$sql= "SELECT * FROM users WHERE nickname = $nickname AND password = $password";
+		$result = $this->connection->query($sql);
+		if ($result->nickname == $nickname && $result->password == $password){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**
@@ -99,8 +146,11 @@ class Database {
 	 * @return boolean|string True si le couple a été ajouté avec succès, un message d'erreur sinon.
 	 */
 	public function addUser($nickname, $password) {
-		/* TODO  */
-		return true;
+		if ($this->checkNicknameAvailability($nickname) && $this->checkNicknameValidity($nickname) && $this->checkPasswordValidity($password)){
+			$sql = "INSERT INTO users(nickname, password) VALUES (?,?)";
+			$stmt = $this->database->prepare($sql);
+			$stmt->execute([$nickname, $password]);
+		}
 	}
 
 	/**
@@ -114,8 +164,12 @@ class Database {
 	 * @return boolean|string True si le mot de passe a été modifié, un message d'erreur sinon.
 	 */
 	public function updateUser($nickname, $password) {
-		/* TODO  */
-		return true;
+		if ($this->checkPasswordValidity($password)){
+			$this->UpdateUserAction($nickname, $password);
+		}
+		else {
+			echo "Il y à eu un problème avec votre requête!!!";
+		}
 	}
 
 	/**

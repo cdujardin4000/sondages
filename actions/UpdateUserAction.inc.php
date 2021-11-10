@@ -22,7 +22,18 @@ class UpdateUserAction extends Action {
 	 * @see Action::run()
 	 */
 	public function run() {
-		/* TODO  */
+		if (isset($_POST['updatePassword']) && isset($_POST['updatePassword2'])){
+
+			if ($_POST['updatePassword'] == $_POST['updatePassword2']){
+				$newPassword = $_POST['updatePassword'];
+				$this->database->updateUser($this->getSessionLogin() , $newPassword);
+				$message = "Modification enregistrée";
+				$this->createUpdateUserFormView($message);
+			}
+			else {
+
+			}
+		}
 	}
 
 	private function createUpdateUserFormView($message) {
